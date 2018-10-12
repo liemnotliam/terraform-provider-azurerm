@@ -121,6 +121,16 @@ func resourceArmKeyVault() *schema.Resource {
 				Optional: true,
 			},
 
+			"enable_soft_delete": {
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_purge_protection": {
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"network_acls": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -176,6 +186,8 @@ func resourceArmKeyVaultCreateUpdate(d *schema.ResourceData, meta interface{}) e
 	enabledForDeployment := d.Get("enabled_for_deployment").(bool)
 	enabledForDiskEncryption := d.Get("enabled_for_disk_encryption").(bool)
 	enabledForTemplateDeployment := d.Get("enabled_for_template_deployment").(bool)
+	enableSoftDelete := d.Get("enable_soft_delete").(bool)
+	enablePurgeProtection := d.Get("enable_purge_protection").(bool)
 	tags := d.Get("tags").(map[string]interface{})
 
 	networkAclsRaw := d.Get("network_acls").([]interface{})
@@ -199,6 +211,16 @@ func resourceArmKeyVaultCreateUpdate(d *schema.ResourceData, meta interface{}) e
 			NetworkAcls:                  networkAcls,
 		},
 		Tags: expandTags(tags),
+	}
+
+	// These two properties do not accept false as their value,
+	// so only set if true
+	if enableSoftDelete {
+		parameters.Properties.EnableSoftDelete = &enableSoftDelete
+	}
+
+	if enablePurgeProtection {
+		parameters.Properties.EnablePurgeProtection = &enablePurgeProtection
 	}
 
 	// Locking this resource so we don't make modifications to it at the same time if there is a
@@ -292,6 +314,15 @@ func resourceArmKeyVaultRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("enabled_for_deployment", props.EnabledForDeployment)
 		d.Set("enabled_for_disk_encryption", props.EnabledForDiskEncryption)
 		d.Set("enabled_for_template_deployment", props.EnabledForTemplateDeployment)
+
+		if props.EnableSoftDelete != nil {
+			d.Set("enable_soft_delete", props.EnableSoftDelete)
+		}
+
+		if props.EnablePurgeProtection != nil {
+			d.Set("enable_purge_protection", props.EnablePurgeProtection)
+		}
+
 		d.Set("vault_uri", props.VaultURI)
 
 		if err := d.Set("sku", flattenKeyVaultSku(props.Sku)); err != nil {

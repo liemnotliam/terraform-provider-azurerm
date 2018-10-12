@@ -204,6 +204,38 @@ func TestAccAzureRMKeyVault_update(t *testing.T) {
 	})
 }
 
+func TestAccAzureRMKeyVault_purgeProtection(t *testing.T) {
+	resourceName := "azurerm_key_vault.test"
+	ri := acctest.RandInt()
+	preConfig := testAccAzureRMKeyVault_basic(ri, testLocation())
+	postConfig := testAccAzureRMKeyVault_purgeProtection(ri, testLocation())
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testCheckAzureRMKeyVaultDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: preConfig,
+				Check: resource.ComposeTestCheckFunc(
+					testCheckAzureRMKeyVaultExists(resourceName),
+					resource.TestCheckResourceAttr(resourceName, "network_acls.#", "0"),
+					resource.TestCheckNoResourceAttr(resourceName, "enable_soft_delete"),
+					resource.TestCheckNoResourceAttr(resourceName, "enable_purge_protection"),
+				),
+			},
+			{
+				Config: postConfig,
+				Check: resource.ComposeTestCheckFunc(
+					testCheckAzureRMKeyVaultExists(resourceName),
+					resource.TestCheckResourceAttr(resourceName, "enable_soft_delete", "true"),
+					resource.TestCheckResourceAttr(resourceName, "enable_purge_protection", "true"),
+				),
+			},
+		},
+	})
+}
+
 func testCheckAzureRMKeyVaultDestroy(s *terraform.State) error {
 	client := testAccProvider.Meta().(*ArmClient).keyVaultClient
 	ctx := testAccProvider.Meta().(*ArmClient).StopContext
@@ -509,6 +541,31 @@ resource "azurerm_key_vault" "test" {
   tags {
     environment = "Production"
   }
+}
+`, rInt, location, rInt)
+}
+
+func testAccAzureRMKeyVault_purgeProtection(rInt int, location string) string {
+	return fmt.Sprintf(`
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_resource_group" "test" {
+  name     = "acctestRG-%d"
+  location = "%s"
+}
+
+resource "azurerm_key_vault" "test" {
+  name                = "vault%d"
+  location            = "${azurerm_resource_group.test.location}"
+  resource_group_name = "${azurerm_resource_group.test.name}"
+  tenant_id           = "${data.azurerm_client_config.current.tenant_id}"
+
+  sku {
+    name = "premium"
+  }
+
+	enable_soft_delete 			= true
+	enable_purge_protection = true
 }
 `, rInt, location, rInt)
 }

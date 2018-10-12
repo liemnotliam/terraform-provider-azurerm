@@ -81,6 +81,10 @@ The following arguments are supported:
 
 * `enabled_for_template_deployment` - (Optional) Boolean flag to specify whether Azure Resource Manager is permitted to retrieve secrets from the key vault. Defaults to `false`.
 
+* `enable_soft_delete` - (Optional) Boolean flag to specify whether soft delete functionality is enabled for Key Vault. By default is not set and does not accept `false` as its value.
+
+* `enable_purge_protection` - (Optional) Boolean flag to specify whether protection against purge is enabled for Key Vault. The setting is effective only if soft delete is also enabled. By default is not set and does not accept `false` as its value.
+
 * `network_acls` - (Optional) A `network_acls` block as defined below.
 
 * `tags` - (Optional) A mapping of tags to assign to the resource.
