@@ -226,6 +226,7 @@ func Provider() terraform.ResourceProvider {
 			"azurerm_notification_hub_namespace":              resourceArmNotificationHubNamespace(),
 			"azurerm_packet_capture":                          resourceArmPacketCapture(),
 			"azurerm_policy_assignment":                       resourceArmPolicyAssignment(),
+			"azurerm_management_group_policy_definition":      resourceArmManagementGroupPolicyDefinition(),
 			"azurerm_policy_definition":                       resourceArmPolicyDefinition(),
 			"azurerm_postgresql_configuration":                resourceArmPostgreSQLConfiguration(),
 			"azurerm_postgresql_database":                     resourceArmPostgreSQLDatabase(),
