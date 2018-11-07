@@ -64,6 +64,14 @@ func TestAccAzureRMNetworkWatcher(t *testing.T) {
 			"withFilters":                testAccAzureRMNetworkPacketCapture_withFilters,
 			"requiresImport":             testAccAzureRMNetworkPacketCapture_requiresImport,
 		},
+		"flowLog": {
+			"basic":                testAccAzureRMNetworkWatcherFlowLog_basic,
+			"disabled":             testAccAzureRMNetworkWatcherFlowLog_disabled,
+			"reenabled":            testAccAzureRMNetworkWatcherFlowLog_reenabled,
+			"retentionPolicy":      testAccAzureRMNetworkWatcherFlowLog_retentionPolicy,
+			"updateStorageAccount": testAccAzureRMNetworkWatcherFlowLog_updateStorageAccount,
+			"trafficAnalytics":     testAccAzureRMNetworkWatcherFlowLog_trafficAnalytics,
+		},
 	}
 
 	for group, m := range testCases {
