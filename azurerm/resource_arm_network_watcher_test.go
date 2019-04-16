@@ -16,7 +16,7 @@ func TestAccAzureRMNetworkWatcher(t *testing.T) {
 	// Azure only being happy about provisioning one per region at once
 	// (which our test suite can't easily workaround)
 	testCases := map[string]map[string]func(t *testing.T){
-		"basic": {
+		/*"basic": {
 			"basic":          testAccAzureRMNetworkWatcher_basic,
 			"requiresImport": testAccAzureRMNetworkWatcher_requiresImport,
 			"complete":       testAccAzureRMNetworkWatcher_complete,
@@ -44,27 +44,8 @@ func TestAccAzureRMNetworkWatcher(t *testing.T) {
 			"storageAccountAndLocalDisk": testAccAzureRMPacketCapture_storageAccountAndLocalDisk,
 			"withFilters":                testAccAzureRMPacketCapture_withFilters,
 			"requiresImport":             testAccAzureRMPacketCapture_requiresImport,
-		},
-		"ConnectionMonitor": {
-			"addressBasic":              testAccAzureRMNetworkConnectionMonitor_addressBasic,
-			"addressComplete":           testAccAzureRMNetworkConnectionMonitor_addressComplete,
-			"addressUpdate":             testAccAzureRMNetworkConnectionMonitor_addressUpdate,
-			"vmBasic":                   testAccAzureRMNetworkConnectionMonitor_vmBasic,
-			"vmComplete":                testAccAzureRMNetworkConnectionMonitor_vmComplete,
-			"vmUpdate":                  testAccAzureRMNetworkConnectionMonitor_vmUpdate,
-			"destinationUpdate":         testAccAzureRMNetworkConnectionMonitor_destinationUpdate,
-			"missingDestinationInvalid": testAccAzureRMNetworkConnectionMonitor_missingDestination,
-			"bothDestinationsInvalid":   testAccAzureRMNetworkConnectionMonitor_conflictingDestinations,
-			"requiresImport":            testAccAzureRMNetworkConnectionMonitor_requiresImport,
-		},
-		"PacketCapture": {
-			"localDisk":                  testAccAzureRMNetworkPacketCapture_localDisk,
-			"storageAccount":             testAccAzureRMNetworkPacketCapture_storageAccount,
-			"storageAccountAndLocalDisk": testAccAzureRMNetworkPacketCapture_storageAccountAndLocalDisk,
-			"withFilters":                testAccAzureRMNetworkPacketCapture_withFilters,
-			"requiresImport":             testAccAzureRMNetworkPacketCapture_requiresImport,
-		},
-		"flowLog": {
+		},*/
+		"FlowLog": {
 			"basic":                testAccAzureRMNetworkWatcherFlowLog_basic,
 			"disabled":             testAccAzureRMNetworkWatcherFlowLog_disabled,
 			"reenabled":            testAccAzureRMNetworkWatcherFlowLog_reenabled,
